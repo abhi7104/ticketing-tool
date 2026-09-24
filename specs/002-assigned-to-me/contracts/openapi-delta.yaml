@@ -1,0 +1,70 @@
+# Additive changes to specs/001-support-ticket-management/contracts/openapi.yaml.
+# During implementation these are merged into that canonical file (the frontend generates its
+# API types from it). Everything not listed here is unchanged.
+openapi: 3.0.3
+info:
+  title: Ticketing Management System API — feature 002 delta
+  version: 1.1.0
+servers:
+  - url: /api/v1
+security:
+  - sessionCookie: []
+
+paths:
+  /tickets:
+    get:
+      summary: List/search/filter tickets (CHANGED — new `view=assigned`)
+      description: |
+        `view=assigned` returns tickets assigned to the signed-in user whose status is OPEN or
+        IN_PROGRESS, ordered by priority (CRITICAL first), then oldest created, then reference.
+        `q` and `status` combine with AND; `status=RESOLVED|CLOSED` therefore returns no items.
+        Other views keep their order (most recently updated first).
+      parameters:
+        - name: view
+          in: query
+          schema: { type: string, enum: [mine, all, assigned], default: mine }
+        # q, status, page, size: unchanged
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TicketPage' }
+        '400':
+          description: VALIDATION_FAILED (e.g. unknown view → field `view`)
+        '401':
+          description: UNAUTHENTICATED
+
+  /tickets/summary:
+    get:
+      summary: Counters for the signed-in user (NEW)
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TicketSummaryCounts' }
+        '401':
+          description: UNAUTHENTICATED
+
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: TMS_SESSION
+  schemas:
+    TicketSummaryCounts:
+      type: object
+      required: [assignedPending]
+      properties:
+        assignedPending:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Tickets assigned to the signed-in user in status OPEN or IN_PROGRESS.
+            Always equals `totalItems` of `GET /tickets?view=assigned` without q/status.
+          example: 3
+    TicketPage:
+      description: Unchanged; see the canonical contract.
+      type: object

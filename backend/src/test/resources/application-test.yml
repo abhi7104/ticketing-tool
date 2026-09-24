@@ -1,0 +1,13 @@
+# Datasource and JWT secret are supplied at runtime by TestDatabase / IntegrationTest.
+app:
+  cookie:
+    secure: false
+  seed:
+    users-enabled: false
+spring:
+  jpa:
+    show-sql: false
+logging:
+  level:
+    org.testcontainers: WARN
+    io.zonky: WARN

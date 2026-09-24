@@ -1,0 +1,35 @@
+# Environment / secrets (never commit)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Backend
+backend/target/
+*.class
+*.jar
+!backend/.mvn/wrapper/maven-wrapper.jar
+.gradle/
+build/
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/coverage/
+frontend/playwright-report/
+frontend/test-results/
+frontend/blob-report/
+*.tsbuildinfo
+next-env.d.ts
+
+# Logs / OS / IDE
+*.log
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml

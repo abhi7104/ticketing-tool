@@ -1,0 +1,8 @@
+title = "ticketing-management-system gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Placeholder-only template values"
+paths = ['''\.env\.example$''']
