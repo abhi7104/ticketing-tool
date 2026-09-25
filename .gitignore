@@ -33,3 +33,6 @@ Thumbs.db
 .idea/
 .vscode/
 *.iml
+
+# Prompt logger state
+.specstory/history/.last-speckit.json
